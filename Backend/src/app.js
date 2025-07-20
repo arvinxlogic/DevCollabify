@@ -1,89 +1,48 @@
 const express = require("express");
 const connectDB = require("./config/database");
-const User = require("./models/user");
-
-app.use(cors());
 const app = express();
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const http = require("http");
+
+require("dotenv").config();
+
+require("./utils/cronjob");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
-// ✅ POST /signup — Create a user
-app.post("/signup", async (req, res) => {
-  const { firstName, lastName, emailId, password } = req.body;
-  try {
-    const user = new User({ firstName, lastName, emailId, password });
-    await user.save();
-    res.status(201).send("User created successfully");
-  } catch (err) {
-    res.status(400).send("Error saving user: " + err.message);
-  }
-});
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
+const userRouter = require("./routes/user");
+const paymentRouter = require("./routes/payment");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
-// ✅ GET /user — Find a user by email
-app.get("/user", async (req, res) => {
-  const userEmail = req.body.emailId;
-  try {
-    const user = await User.findOne({ emailId: userEmail });
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    res.send(user);
-  } catch (err) {
-    res.status(400).send("Error finding user: " + err.message);
-  }
-});
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
+app.use("/", paymentRouter);
+app.use("/", chatRouter);
 
-// ✅ DELETE /user — Delete user by ID
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const deletedUser = await User.findByIdAndDelete(userId);
-    if (!deletedUser) {
-      return res.status(404).send("User not found for deletion");
-    }
-    res.send(`User ${userId} deleted successfully`);
-  } catch (err) {
-    res.status(400).send("Something went wrong: " + err.message);
-  }
-});
+const server = http.createServer(app);
+initializeSocket(server);
 
-// ✅ PATCH /user — Update user by ID passed in body
-app.patch("/user", async (req, res) => {
-  const { userId, ...updateData } = req.body;
-
-  if (!userId) {
-    return res.status(400).send("userId is required");
-  }
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      updateData,
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).send("User not found");
-    }
-
-    res.send(updatedUser);
-  } catch (err) {
-    res.status(400).send("Error updating user: " + err.message);
-  }
-});
-
-// Placeholder route
-app.get("/feed", (req, res) => {
-  res.send("Feed route not implemented");
-});
-
-// ✅ Start server after DB connects
 connectDB()
   .then(() => {
-    console.log("Database connection established");
-    app.listen(3000, () => {
-      console.log("Server is successfully listening on port 3000");
+    console.log("Database connection established...");
+    server.listen(process.env.PORT, () => {
+      console.log("Server is successfully listening on port 7777...");
     });
   })
   .catch((err) => {
-    console.log("Database not connected", err);
+    console.error("Database cannot be connected!!");
   });
