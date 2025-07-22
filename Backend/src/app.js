@@ -3,17 +3,17 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cookieParser());
 
 // Error-handling middleware (placed at the end later)
-
-
-
-
 
 // Signup route — POST /signup
 app.post("/signup", async (req, res) => {
@@ -47,11 +47,23 @@ app.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
     const user = await User.findOne({ emailId: emailId });
+
     if (!user) {
       throw new Error("Invalid credentials");
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    const isPasswordValid = await user.validatePassword(password);
+
     if (isPasswordValid) {
+      // ✅ Generate the token
+      const token = await user.getJWT();
+
+      // ✅ Set cookie
+      res.cookie("token", token, {
+        httpOnly: true, // Optional: Makes cookie more secure
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+
       res.send("Login Successful!!!");
     } else {
       throw new Error("Invalid credentials");
@@ -60,86 +72,20 @@ app.post("/login", async (req, res) => {
     res.status(400).send("ERROR : " + err.message);
   }
 });
-
-
-// Get user by email — GET /user
-app.get("/user", async (req, res) => {
-  const userEmail = req.body.emailId;
-
+app.get("/profile", userAuth, async (req, res) => {
+  const user = req.user;
   try {
-    console.log(userEmail);
-    const user = await User.findOne({ emailId: userEmail });
-    if (!user) {
-      res.status(404).send("User not found");
-    } else {
-      res.send(user);
-    }
+    res.send(user);
   } catch (err) {
-    res.status(400).send("Something went wrong");
+    res.status(400).send("ERROR : " + err.message);
   }
 });
-// DELETE
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findByIdAndDelete({ _id: userId });
-    //const user = await User.findByIdAndDelete(userId);
-
-    res.send("User deleted successfully");
-  } catch (err) {
-    res.status(400).send("Something went wrong ");
-  }
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  const user = req.user;
+  // Sending a connection request
+  console.log("Sending a connection request");
+  res.send("connection request sent")
 });
-
-// UPDATE data of the user
-app.patch("/user/:userId", async (req, res) => {
-  const userId = req.params?.userId;
-  const data = req.body;
-
-  try {
-    const ALLOWED_UPDATES = ["photoUrl", "about", "gender", "age", "skills"];
-    const isUpdateAllowed = Object.keys(data).every((k) =>
-      ALLOWED_UPDATES.includes(k)
-    );
-    if (!isUpdateAllowed) {
-      throw new Error("Update not allowed");
-    }
-    if (data?.skills.length > 10) {
-      throw new Error("Skills cannot be more than 10");
-    }
-    const user = await User.findByIdAndUpdate({ _id: userId }, data, {
-      returnDocument: "after",
-      runValidators: true,
-    });
-    console.log(user);
-    res.send("User updated successfully");
-  } catch (err) {
-    res.status(400).send("Something went wrong ");
-    res.status(400).send("UPDATE FAILED:" + err.message);
-  }
-});
-
-// Get all users — GET /feed
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch (err) {
-    res.status(400).send("Something went wrong");
-  }
-});
-
-// Dummy route — GET /getUserData
-app.get("/getUserData", (req, res) => {
-  res.send("Simulated user data response");
-});
-
-// Global error-handling middleware (must come after all routes)
-app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err.message);
-  res.status(500).send("Something went wrong");
-});
-
 // Connect to DB and start server
 connectDB()
   .then(() => {
