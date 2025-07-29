@@ -54,6 +54,7 @@ const Login = () => {
             {isLoginForm ? "Login" : "Sign Up"}
           </h2>
           <div>
+            
             {!isLoginForm && (
               <>
                 <label className="form-control w-full max-w-xs my-2">
