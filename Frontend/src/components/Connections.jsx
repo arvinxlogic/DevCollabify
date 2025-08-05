@@ -18,6 +18,7 @@ const Connections = () => {
     }
   };
 
+  
   useEffect(() => {
     fetchConnections();
   }, []);
