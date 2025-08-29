@@ -7,9 +7,9 @@ import appStore from "./utils/appStore";
 import Feed from "./components/Feed";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
-import Premium from "./components/Premium";
-import Chat from "./components/Chat";
-import Connections from "./components/Connections";
+// import Premium from "./components/P";
+// import Chat from "./components/Chat";
+// import Connections from "./components/Connections";
 
 function App() {
   return (

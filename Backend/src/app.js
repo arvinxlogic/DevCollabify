@@ -5,7 +5,6 @@ const userRouter = require("./routes/user");
 
 const cors = require("cors");
 
-
 const app = express();
 
 // Middleware to parse JSON bodies
@@ -19,23 +18,21 @@ app.use(
   })
 );
 
-const authRouter=require("./routes/auth");
-const profileRouter=require("./routes/profile");
-const requestRouter=require("./routes/request");
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
 
-app.use("/",authRouter);
-app.use("/",profileRouter);
+app.use("/", authRouter);
+app.use("/", profileRouter);
 app.use("/", userRouter);
-
-
-app.use("/",requestRouter);
+app.use("/", requestRouter);
 
 // Connect to DB and start server
 connectDB()
   .then(() => {
     console.log("Database connection established...");
     app.listen(3000, () => {
-      console.log("Server is successfully listening on port 7777...");
+      console.log("Server is successfully listening on port 3000...");
     });
   })
   .catch((err) => {
