@@ -5,15 +5,20 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
+  const fetchingRef = useRef(false); // Prevent duplicate calls
 
   const fetchUser = async () => {
-    if (userData) return;
+    // Prevent duplicate calls
+    if (userData || fetchingRef.current) return;
+    
+    fetchingRef.current = true;
+    
     try {
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
@@ -21,17 +26,20 @@ const Body = () => {
       dispatch(addUser(res.data));
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 400) {
-        // Clear any existing cookies and redirect to login
-        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        navigate("/login");
+        // Only navigate to login if we're not already there
+        if (location.pathname !== "/login") {
+          navigate("/login");
+        }
         return;
       }
       console.error("Fetch user error:", err);
+    } finally {
+      fetchingRef.current = false;
     }
   };
 
   useEffect(() => {
-    // Don't fetch user if we're already on login page
+    // Don't fetch user if we're on login page
     if (location.pathname !== "/login") {
       fetchUser();
     }
@@ -45,4 +53,5 @@ const Body = () => {
     </div>
   );
 };
+
 export default Body;
