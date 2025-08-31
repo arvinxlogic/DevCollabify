@@ -20,15 +20,21 @@ const Body = () => {
       });
       dispatch(addUser(res.data));
     } catch (err) {
-      if (err.status === 401) {
+      if (err.response?.status === 401 || err.response?.status === 400) {
+        // Clear any existing cookies and redirect to login
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         navigate("/login");
+        return;
       }
-      console.error(err);
+      console.error("Fetch user error:", err);
     }
   };
 
   useEffect(() => {
-    fetchUser();
+    // Don't fetch user if we're already on login page
+    if (location.pathname !== "/login") {
+      fetchUser();
+    }
   }, []);
 
   return (
