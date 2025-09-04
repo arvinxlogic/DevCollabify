@@ -5,7 +5,8 @@ const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 
-const sendEmail=require("../utils/sendEmail.js");
+const sendEmail = require("../utils/sendEmail.js");
+
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
@@ -57,6 +58,7 @@ requestRouter.post(
     }
   }
 );
+
 requestRouter.post(
   "/request/review/:status/:requestId",
   userAuth,
@@ -67,14 +69,15 @@ requestRouter.post(
 
       const allowedStatus = ["accepted", "rejected"];
       if (!allowedStatus.includes(status)) {
-        return res.status(400).json({ messaage: "Status not allowed!" });
+        return res.status(400).json({ message: "Status not allowed!" });
       }
 
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId,
         toUserId: loggedInUser._id,
         status: "interested",
-      });
+      }).populate("fromUserId", "firstName lastName emailId");
+
       if (!connectionRequest) {
         return res
           .status(404)
@@ -82,11 +85,19 @@ requestRouter.post(
       }
 
       connectionRequest.status = status;
-
       const data = await connectionRequest.save();
-      const emailRes=await sendEmail.run();
-      console.log("Email sent response: ",emailRes);
 
+      // ✅ Send email with proper subject and body
+      try {
+        const emailSubject = `Connection Request ${status.charAt(0).toUpperCase() + status.slice(1)}`;
+        const emailBody = `Your connection request from ${connectionRequest.fromUserId.firstName} has been ${status}.`;
+        
+        const emailRes = await sendEmail.run(emailSubject, emailBody);
+        console.log("Email sent response: ", emailRes);
+      } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+        // Don't fail the request if email fails
+      }
 
       res.json({ message: "Connection request " + status, data });
     } catch (err) {
@@ -94,4 +105,5 @@ requestRouter.post(
     }
   }
 );
+
 module.exports = requestRouter;
