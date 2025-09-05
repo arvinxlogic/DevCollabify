@@ -23,7 +23,7 @@ const NavBar = () => {
     <div className="navbar bg-black border-b border-gray-800 shadow-lg">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl text-white hover:bg-gray-900">
-          👩‍💻 DevTinder
+          👨🏻‍💻 DevConnect
         </Link>
       </div>
       {user && (
