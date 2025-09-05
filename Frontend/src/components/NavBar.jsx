@@ -15,53 +15,51 @@ const NavBar = () => {
       dispatch(removeUser());
       return navigate("/login");
     } catch (err) {
-      // Error logic maybe redirect to error page
       console.log(err);
     }
   };
 
   return (
-    <div className="navbar bg-base-300">
+    <div className="navbar bg-black border-b border-gray-800 shadow-lg">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+        <Link to="/" className="btn btn-ghost text-xl text-white hover:bg-gray-900">
           👩‍💻 DevTinder
         </Link>
       </div>
       {user && (
         <div className="flex-none gap-2">
-          <div className="form-control">Welcome, {user.firstName}</div>
+          <div className="form-control text-gray-300">Welcome, {user.firstName}</div>
           <div className="dropdown dropdown-end mx-5 flex">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle avatar"
+              className="btn btn-ghost btn-circle avatar hover:bg-gray-900"
             >
-              <div className="w-10 rounded-full">
+              <div className="w-10 rounded-full ring-2 ring-gray-700">
                 <img alt="user photo" src={user.photoUrl} />
               </div>
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-black border border-gray-800 rounded-box z-[1] mt-3 w-52 p-2 shadow-xl"
             >
               <li>
-                <Link to="/profile" className="justify-between">
+                <Link to="/profile" className="justify-between text-white hover:bg-gray-900">
                   Profile
-                  <span className="badge">New</span>
+                  <span className="badge badge-accent">New</span>
                 </Link>
               </li>
               <li>
-                <Link to="/connections">Connections</Link>
-              </li>
-
-              <li>
-                <Link to="/requests">Requests</Link>
+                <Link to="/connections" className="text-white hover:bg-gray-900">Connections</Link>
               </li>
               <li>
-                <Link to="/premium">Premium</Link>
+                <Link to="/requests" className="text-white hover:bg-gray-900">Requests</Link>
               </li>
               <li>
-                <a onClick={handleLogout}>Logout</a>
+                <Link to="/premium" className="text-white hover:bg-gray-900">Premium</Link>
+              </li>
+              <li>
+                <a onClick={handleLogout} className="text-red-400 hover:bg-gray-900">Logout</a>
               </li>
             </ul>
           </div>

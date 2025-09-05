@@ -11,10 +11,9 @@ const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
-  const fetchingRef = useRef(false); // Prevent duplicate calls
+  const fetchingRef = useRef(false);
 
   const fetchUser = async () => {
-    // Prevent duplicate calls
     if (userData || fetchingRef.current) return;
     
     fetchingRef.current = true;
@@ -26,7 +25,6 @@ const Body = () => {
       dispatch(addUser(res.data));
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 400) {
-        // Only navigate to login if we're not already there
         if (location.pathname !== "/login") {
           navigate("/login");
         }
@@ -39,14 +37,13 @@ const Body = () => {
   };
 
   useEffect(() => {
-    // Don't fetch user if we're on login page
     if (location.pathname !== "/login") {
       fetchUser();
     }
   }, []);
 
   return (
-    <div>
+    <div className="bg-gray-900 min-h-screen">
       <NavBar />
       <Outlet />
       <Footer />

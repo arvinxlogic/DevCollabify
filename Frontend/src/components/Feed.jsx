@@ -9,10 +9,9 @@ const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const fetchingRef = useRef(false); // Prevent duplicate calls
+  const fetchingRef = useRef(false);
 
   const getFeed = async () => {
-    // Prevent duplicate calls and ensure user exists
     if (feed || !user || fetchingRef.current) return;
     
     fetchingRef.current = true;
@@ -23,7 +22,6 @@ const Feed = () => {
       });
       dispatch(addFeed(res?.data?.data));
     } catch (err) {
-      // Only log significant errors, ignore auth errors in development
       if (err.response?.status !== 401) {
         console.log("Feed fetch failed:", err.response?.status);
       }
@@ -38,21 +36,29 @@ const Feed = () => {
     }
   }, [user]);
 
-  // Show loading if user exists but no feed yet
-  if (user && !feed) return <div className="flex justify-center my-10">Loading...</div>;
+  if (user && !feed) return (
+    <div className="min-h-screen bg-gray-900 flex justify-center items-center">
+      <div className="text-white text-xl">Loading...</div>
+    </div>
+  );
 
-  // Don't show anything if no user (let Body.jsx handle redirect)
   if (!user) return null;
 
   if (feed && feed.length <= 0)
-    return <h1 className="flex justify-center my-10">No new users found!</h1>;
+    return (
+      <div className="min-h-screen bg-gray-900 flex justify-center items-center">
+        <h1 className="text-white text-2xl">No new users found!</h1>
+      </div>
+    );
 
   return (
-    feed && (
-      <div className="flex justify-center my-10">
-        <UserCard user={feed[0]} />
-      </div>
-    )
+    <div className="min-h-screen bg-gray-900">
+      {feed && (
+        <div className="flex justify-center py-10">
+          <UserCard user={feed[0]} />
+        </div>
+      )}
+    </div>
   );
 };
 
