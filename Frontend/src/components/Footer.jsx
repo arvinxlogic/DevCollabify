@@ -19,8 +19,8 @@ const Footer = () => {
             </p>
             <div className="space-y-2">
               <p className="text-gray-400 text-sm flex items-center">
-                📧 <a href="mailto:support@connectdev.online" className="hover:text-blue-400 transition-colors ml-2">
-                  support@connectdev.online
+                📧 <a href="mailto:arvindsinghq05@gmail.com" className="hover:text-blue-400 transition-colors ml-2">
+                  arvindsinghq05@connectdev.online
                 </a>
               </p>
               <p className="text-gray-400 text-sm flex items-center">
@@ -55,7 +55,7 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Support</h4>
             <ul className="space-y-3">
-              <li><a href="mailto:support@connectdev.online" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Email Support</a></li>
+              <li><a href="mailto:arvindsinghq05@gmail.com" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Email Support</a></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Help Center</Link></li>
               <li><span className="text-gray-400 text-sm">Response: 24-48 hours</span></li>
             </ul>
@@ -80,8 +80,8 @@ const Footer = () => {
         <div className="mt-6 pt-4 border-t border-gray-800 text-center">
           <p className="text-gray-500 text-xs leading-relaxed">
             Secure payments powered by Razorpay | Business Email:{" "}
-            <a href="mailto:support@connectdev.online" className="text-blue-400 hover:text-blue-300 transition-colors">
-              support@connectdev.online
+            <a href="mailto:arvindsinghq05@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+              arvindsinghq05@connectdev.online
             </a>{" "}
             | Website:{" "}
             <a href="https://connectdev.online" target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
