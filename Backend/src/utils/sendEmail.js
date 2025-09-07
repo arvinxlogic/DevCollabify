@@ -39,7 +39,7 @@ const createSendEmailCommand = (toAddress, fromAddress, subject, body) => {
   });
 };
 
-const run = async (subject = "Connection Request Update", body = "Your connection request has been updated") => {
+const run = async (subject = "Connection Request Update", toEmailId,body = "Your connection request has been updated") => {
   console.log("📧 Sending email:", subject);
   
   const sendEmailCommand = createSendEmailCommand(

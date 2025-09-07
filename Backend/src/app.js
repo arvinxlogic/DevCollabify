@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const app = express();
-
+require("./utils/cronjob"); // Import cronjob to start scheduled tasks
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
