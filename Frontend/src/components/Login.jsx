@@ -55,7 +55,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-xl p-8">
+      <div className="w-full max-w-md bg-black rounded-lg shadow-xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-white mb-2">
             {isLoginForm ? "Welcome Back" : "Create Account"}
@@ -74,7 +74,7 @@ const Login = () => {
                 placeholder="First Name"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
                 disabled={isLoading}
                 required
               />
@@ -84,7 +84,7 @@ const Login = () => {
                 placeholder="Last Name"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
                 disabled={isLoading}
                 required
               />
@@ -97,7 +97,7 @@ const Login = () => {
             placeholder="Email Address"
             value={formData.emailId}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
             disabled={isLoading}
             required
           />
@@ -108,7 +108,7 @@ const Login = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
             disabled={isLoading}
             required
           />
@@ -122,7 +122,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Loading..." : isLoginForm ? "Sign In" : "Create Account"}
           </button>
@@ -134,7 +134,7 @@ const Login = () => {
               setIsLoginForm(!isLoginForm);
               setError("");
             }}
-            className="text-gray-400 hover:text-blue-400 text-sm transition-colors"
+            className="text-gray-400 hover:text-blue-500 text-sm transition-colors"
             disabled={isLoading}
           >
             {isLoginForm ? "Need an account? Sign up" : "Have an account? Sign in"}
