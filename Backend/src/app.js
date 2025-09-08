@@ -25,9 +25,11 @@ app.get("/test-email", async (req, res) => {
     console.log("🧪 Testing email sending...");
     const sendEmail = require("./utils/sendEmail.js");
     
+    // ✅ Fixed parameter order: recipient, subject, body
     const result = await sendEmail.run(
-      "Test Email - " + new Date().toISOString(),
-      "This is a test email to check if SES is working."
+      "arvindsinghq05@gmail.com", // recipient email
+      "Test Email - " + new Date().toISOString(), // subject
+      "This is a test email to check if SES is working." // body
     );
     
     console.log("📧 Email test result:", result);
@@ -53,10 +55,12 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
+const paymentRouter = require('./routes/payment.js');
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", userRouter);
+app.use('/', paymentRouter)
 app.use("/", requestRouter);
 
 // Connect to DB and start server

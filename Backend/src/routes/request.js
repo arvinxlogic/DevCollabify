@@ -1,10 +1,8 @@
 const express = require("express");
-
 const requestRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-
 const sendEmail = require("../utils/sendEmail.js");
 
 requestRouter.post(
@@ -48,10 +46,30 @@ requestRouter.post(
 
       const data = await connectionRequest.save();
 
+      // ✅ Send email notification to the recipient
+      if (status === "interested") {
+        try {
+          const emailSubject = `New Connection Request from ${req.user.firstName}`;
+          const emailBody = `${req.user.firstName} ${req.user.lastName} is interested in connecting with you. Please check your ConnectDev account to review this request.`;
+          
+          // ✅ Fixed parameter order: recipient email first
+          const emailRes = await sendEmail.run(toUser.emailId, emailSubject, emailBody);
+          console.log("Email sent response: ", emailRes);
+        } catch (emailError) {
+          console.error("Email sending failed:", emailError);
+          // Don't fail the request if email fails
+        }
+      }
+
       res.json({
-        message:
-          req.user.firstName + " is " + status + " in " + toUser.firstName,
+        message: req.user.firstName + " is " + status + " in " + toUser.firstName,
         data,
+        // ✅ Include recipient info for frontend updates
+        recipient: {
+          _id: toUser._id,
+          firstName: toUser.firstName,
+          emailId: toUser.emailId
+        }
       });
     } catch (err) {
       res.status(400).send("ERROR: " + err.message);
@@ -87,23 +105,69 @@ requestRouter.post(
       connectionRequest.status = status;
       const data = await connectionRequest.save();
 
-      // ✅ Send email with proper subject and body
+      // ✅ Send email to the person who made the original request
       try {
         const emailSubject = `Connection Request ${status.charAt(0).toUpperCase() + status.slice(1)}`;
-        const emailBody = `Your connection request from ${connectionRequest.fromUserId.firstName} has been ${status}.`;
+        const emailBody = `${loggedInUser.firstName} ${loggedInUser.lastName} has ${status} your connection request.`;
         
-        const emailRes = await sendEmail.run(emailSubject, emailBody);
+        // ✅ Send to the person who made the original request
+        const emailRes = await sendEmail.run(
+          connectionRequest.fromUserId.emailId, 
+          emailSubject, 
+          emailBody
+        );
         console.log("Email sent response: ", emailRes);
       } catch (emailError) {
         console.error("Email sending failed:", emailError);
         // Don't fail the request if email fails
       }
 
-      res.json({ message: "Connection request " + status, data });
+      res.json({ 
+        message: "Connection request " + status, 
+        data,
+        // ✅ Include updated request data for frontend
+        updatedRequest: {
+          _id: data._id,
+          status: data.status,
+          fromUserId: connectionRequest.fromUserId,
+          toUserId: loggedInUser._id
+        }
+      });
     } catch (err) {
       res.status(400).send("ERROR: " + err.message);
     }
   }
 );
+
+// ✅ Add route to get pending requests (for real-time updates)
+requestRouter.get("/request/received", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      toUserId: loggedInUser._id,
+      status: "interested",
+    }).populate("fromUserId", "firstName lastName age gender about skills photoUrl");
+
+    res.json({ message: "Data fetched successfully", data: connectionRequests });
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+// ✅ Add route to get sent requests
+requestRouter.get("/request/sent", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      fromUserId: loggedInUser._id,
+    }).populate("toUserId", "firstName lastName age gender about skills photoUrl");
+
+    res.json({ message: "Data fetched successfully", data: connectionRequests });
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
 
 module.exports = requestRouter;

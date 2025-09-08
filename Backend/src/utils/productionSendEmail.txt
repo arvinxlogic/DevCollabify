@@ -42,37 +42,21 @@ const createSendEmailCommand = (toAddress, fromAddress, subject, body) => {
 };
 
 const run = async (toEmailId, subject = "Connection Request Update", body = "Your connection request has been updated") => {
-  console.log("📧 Attempting to send email to:", toEmailId);
+  console.log("📧 Sending email to:", toEmailId);
   console.log("📧 Subject:", subject);
   
-  // 🔥 SANDBOX MODE FIX: Send all emails to your verified email for testing
-  const actualRecipient = "arvindsinghq05@gmail.com"; // Your verified email
-  
-  // 🔥 Update email content to show original recipient and better formatting
-  const enhancedBody = `
-    <strong>Original Recipient:</strong> ${toEmailId}<br>
-    <strong>Message:</strong><br>
-    ${body}
-    <br><br>
-    <em>Note: This email was redirected to you because AWS SES is in sandbox mode.</em>
-  `;
-  
-  const enhancedSubject = `[ConnectDev] ${subject} (for ${toEmailId})`;
-  
-  console.log(`🔄 SANDBOX MODE: Redirecting email from ${toEmailId} to ${actualRecipient}`);
-  
+  // 🔥 PRODUCTION MODE: Send to actual recipient
   const sendEmailCommand = createSendEmailCommand(
-    actualRecipient,                // TO: Your verified email
+    toEmailId,                      // TO: Actual recipient email
     "arvind@connectdev.online",     // FROM: Your verified domain
-    enhancedSubject,
-    enhancedBody
+    subject,
+    body
   );
 
   try {
     const result = await sesClient.send(sendEmailCommand);
     console.log("✅ Email sent successfully! Message ID:", result.MessageId);
-    console.log(`📬 Email redirected from ${toEmailId} to ${actualRecipient}`);
-    return { success: true, messageId: result.MessageId, redirected: true };
+    return { success: true, messageId: result.MessageId };
   } catch (caught) {
     console.error("❌ Email sending failed:", caught.message);
     return { success: false, error: caught.message };
