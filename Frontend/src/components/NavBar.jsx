@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import { useState } from "react";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -19,72 +21,160 @@ const NavBar = () => {
     }
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <div className="navbar bg-black border-b border-gray-800 shadow-lg sticky top-0 z-50 backdrop-blur-sm">
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl text-white hover:bg-gray-900 transition-all duration-200 hover:scale-105">
-          👨🏻‍💻 DevConnect
-        </Link>
-      </div>
-      {user && (
-        <div className="flex-none gap-2">
-          <div className="hidden sm:block form-control text-gray-300 px-3">
-            Welcome, <span className="text-blue-400 font-semibold">{user.firstName}</span>
-          </div>
-          <div className="dropdown dropdown-end mx-5 flex">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar hover:bg-gray-900 relative group"
-            >
-              <div className="w-10 rounded-full ring-2 ring-gray-700 group-hover:ring-blue-500 transition-all duration-200">
-                <img 
-                  alt="user photo" 
-                  src={user.photoUrl} 
-                  className="rounded-full object-cover"
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/40/4b5563/ffffff?text=U';
-                  }}
-                />
+    <nav className="bg-gray-900/95 backdrop-blur-md border-b border-gray-700/50 shadow-xl sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="flex items-center space-x-2 text-xl font-bold text-white hover:text-blue-400 transition-all duration-300"
+          >
+            <span className="text-2xl">👨🏻‍💻</span>
+            <span>DevConnect</span>
+          </Link>
+
+          {user && (
+            <>
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center space-x-6">
+                <div className="text-gray-300 text-sm">
+                  Hey, <span className="text-blue-400 font-medium">{user.firstName}!</span>
+                </div>
+                
+                <div className="flex items-center space-x-1">
+                  <Link 
+                    to="/profile" 
+                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
+                  >
+                    Profile
+                  </Link>
+                  <Link 
+                    to="/connections" 
+                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
+                  >
+                    Connections
+                  </Link>
+                  <Link 
+                    to="/requests" 
+                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
+                  >
+                    Requests
+                  </Link>
+                  <Link 
+                    to="/premium" 
+                    className="px-3 py-2 rounded-lg text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 transition-all duration-200 font-medium"
+                  >
+                    Premium ⭐
+                  </Link>
+                </div>
+                
+                {/* User Section */}
+                <div className="flex items-center space-x-3 pl-3 border-l border-gray-700">
+                  <div className="relative">
+                    <img 
+                      alt="user photo" 
+                      src={user.photoUrl} 
+                      className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-600 hover:ring-blue-500 transition-all duration-200"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/36/6b7280/ffffff?text=' + user.firstName[0];
+                      }}
+                    />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                  </div>
+                  
+                  <button 
+                    onClick={handleLogout}
+                    className="px-3 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all duration-200 text-sm font-medium"
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
-              {/* Online status indicator */}
-              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-black"></div>
+
+              {/* Mobile hamburger button */}
+              <div className="md:hidden flex items-center space-x-3">
+                <div className="relative">
+                  <img 
+                    alt="user photo" 
+                    src={user.photoUrl} 
+                    className="w-8 h-8 rounded-full object-cover ring-2 ring-gray-600"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/32/6b7280/ffffff?text=' + user.firstName[0];
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={toggleMenu}
+                  className="p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none transition-all duration-200"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {isMenuOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {user && isMenuOpen && (
+        <div className="md:hidden bg-gray-900/98 backdrop-blur-sm border-t border-gray-700/50">
+          <div className="px-4 pt-2 pb-4 space-y-1">
+            <div className="px-3 py-3 text-gray-300 border-b border-gray-700/50 mb-3">
+              <span className="text-sm">Welcome back,</span>
+              <div className="text-blue-400 font-medium">{user.firstName}!</div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-black border border-gray-800 rounded-box z-[1] mt-3 w-52 p-2 shadow-2xl"
-            >
-              <li>
-                <Link to="/profile" className="justify-between text-white hover:bg-gray-900 hover:text-blue-400 transition-colors">
-                  Profile
-                  <span className="badge badge-accent text-xs">Edit</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/connections" className="text-white hover:bg-gray-900 hover:text-blue-400 transition-colors">
-                  Connections
-                </Link>
-              </li>
-              <li>
-                <Link to="/requests" className="text-white hover:bg-gray-900 hover:text-blue-400 transition-colors">
-                  Requests
-                </Link>
-              </li>
-              <li>
-                <Link to="/premium" className="text-white hover:bg-gray-900 hover:text-yellow-400 transition-colors">
-                  Premium ⭐
-                </Link>
-              </li>
-              <li className="border-t border-gray-700 mt-2 pt-2">
-                <a onClick={handleLogout} className="text-red-400 hover:bg-gray-900 hover:text-red-300 transition-colors cursor-pointer">
-                  Logout
-                </a>
-              </li>
-            </ul>
+            
+            {[
+              { to: "/profile", label: "Profile" },
+              { to: "/connections", label: "Connections" },
+              { to: "/requests", label: "Requests" },
+              { to: "/premium", label: "Premium ⭐", special: true }
+            ].map(({ to, label, special }) => (
+              <Link 
+                key={to}
+                to={to} 
+                className={`block px-3 py-3 rounded-lg transition-all duration-200 ${
+                  special 
+                    ? "text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 font-medium" 
+                    : "text-gray-300 hover:text-white hover:bg-gray-800"
+                }`}
+                onClick={closeMenu}
+              >
+                {label}
+              </Link>
+            ))}
+            
+            <div className="pt-3 border-t border-gray-700/50">
+              <button 
+                onClick={() => {
+                  handleLogout();
+                  closeMenu();
+                }}
+                className="w-full text-left px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all duration-200"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </nav>
   );
 };
+
 export default NavBar;
