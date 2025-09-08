@@ -44,6 +44,7 @@ gender: {
     values: ["male", "female", "other"],
     message: `{VALUE} is not a valid gender type`,
   },
+},
   isPremium:{
     type: Boolean,
     default: false,
@@ -51,7 +52,6 @@ gender: {
   membershipType: {
     type: String,
 }, // Add this bracket
-},
   photoUrl: {
     type: String,
     default: "https://geographyandyou.com/images/user-profile.png",
