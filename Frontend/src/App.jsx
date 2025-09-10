@@ -17,7 +17,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import TermsConditions from "./components/TermsConditions";
 import Premium from "./components/Premium";
 // import RefundPolicy from "./components/RefundPolicy";
-
+import Chat from "./components/Chat";
 // Payment Components (to be created)
 // import Payment from "./components/Payment";
 
@@ -34,7 +34,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/premium" element={<Premium/>} />
-
+<Route path="/chat/:targetUserId" element={<Chat/>} />
               {/* Legal Pages Routes */}
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactUs />} />

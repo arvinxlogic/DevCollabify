@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http=require('http');
 
 const app = express();
 require("./utils/cronjob"); // Import cronjob to start scheduled tasks
@@ -56,18 +57,23 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const paymentRouter = require('./routes/payment.js');
+const initializeSocket = require('./utils/socket.js');
+const chatRouter = require('./routes/chat.js');
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", userRouter);
 app.use('/', paymentRouter)
 app.use("/", requestRouter);
+app.use('/',chatRouter)
 
+const server=http.createServer(app);
+initializeSocket(server);
 // Connect to DB and start server
 connectDB()
   .then(() => {
     console.log("Database connection established...");
-    app.listen(3000, () => {
+    server.listen(3000, () => {
       console.log("Server is successfully listening on port 3000...");
       console.log("🧪 Test email endpoint available at: http://localhost:3000/test-email");
     });
