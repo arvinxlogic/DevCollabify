@@ -1,117 +1,106 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/constants";
-import { useDispatch } from "react-redux";
-import { removeUserFromFeed } from "../utils/feedSlice";
+// src/components/UserCard.jsx - Updated version
 import { useState } from "react";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, isPreview = false, onSwipe }) => {
   const { _id, firstName, lastName, photoUrl, age, gender, about } = user;
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const handleSendRequest = async (status, userId) => {
-    setIsLoading(true);
-    try {
-      const res = await axios.post(
-        BASE_URL + "/request/send/" + status + "/" + userId,
-        {},
-        { withCredentials: true }
-      );
-      dispatch(removeUserFromFeed(userId));
-    } catch (err) {
-      console.error("Request failed:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="card bg-black border border-gray-800 w-96 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:border-gray-700 group">
-      <figure className="px-4 pt-4 relative overflow-hidden">
-        {!imageError ? (
-          <img 
-            src={photoUrl} 
-            alt={`${firstName} ${lastName}`} 
-            className="rounded-xl w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div className="rounded-xl w-full h-80 bg-gray-800 flex items-center justify-center">
-            <div className="text-gray-400 text-center">
-              <div className="text-6xl mb-2">👤</div>
-              <p className="text-sm">Photo unavailable</p>
+  // If it's a preview card (next in stack), don't show buttons
+  if (isPreview) {
+    return (
+      <div className="w-full max-w-md mx-auto pointer-events-none">
+        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-cyan-500/20">
+          <div className="relative h-[500px] overflow-hidden bg-gradient-to-b from-gray-800 to-gray-900">
+            <img
+              src={imageError ? `https://ui-avatars.com/api/?name=${firstName}+${lastName}&size=400&background=0891b2&color=fff&bold=true` : photoUrl}
+              alt={`${firstName} ${lastName}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                setImageError(true);
+                e.target.src = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&size=400&background=0891b2&color=fff&bold=true`;
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h2 className="text-3xl font-bold text-white mb-1">
+                {firstName} {lastName}
+              </h2>
+              {age && gender && (
+                <p className="text-cyan-400 text-sm">{age} • {gender}</p>
+              )}
             </div>
           </div>
-        )}
-        {/* Gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-      </figure>
-      
-      <div className="card-body">
-        <h2 className="card-title text-white text-xl font-bold">
-          {firstName + " " + lastName}
-          {/* Verified badge simulation */}
-          <div className="badge badge-primary badge-sm ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            ✓
-          </div>
-        </h2>
-        
-        {age && gender && (
-          <div className="flex items-center gap-2 text-gray-400 text-sm">
-            <span>📍</span>
-            <span>{age}, {gender}</span>
-          </div>
-        )}
-        
-        <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
-          {about || "No description available"}
-        </p>
-        
-        {/* Skills/Tags placeholder - you can expand this */}
-        {/* <div className="flex flex-wrap gap-1 mt-2">
-          <span className="badge badge-outline badge-sm text-blue-400 border-blue-400">Developer</span>
-          <span className="badge badge-outline badge-sm text-green-400 border-green-400">Tech</span>
-        </div> */}
-        
-        <div className="card-actions justify-center my-4 gap-4">
-          <button
-            className="btn bg-gray-800 text-white border-gray-700 hover:bg-gray-700 hover:border-gray-600 px-8 transition-all duration-200 disabled:opacity-50"
-            onClick={() => handleSendRequest("ignored", _id)}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span className="loading loading-spinner loading-sm"></span>
-            ) : (
-              <>
-                {/* <span className="mr-2"></span> */}
-                Pass
-              </>
-            )}
-          </button>
-          
-          <button
-            className="btn bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-none px-8 transition-all duration-200 hover:scale-105 hover:shadow-lg disabled:opacity-50"
-            onClick={() => handleSendRequest("interested", _id)}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span className="loading loading-spinner loading-sm"></span>
-            ) : (
-              <>
-                {/* <span className="mr-2">💼</span> */}
-                Connect
-              </>
-            )}
-          </button>
         </div>
-        
-        {/* Connection success message could go here */}
-        {isLoading && (
-          <div className="text-center text-sm text-gray-400 animate-pulse">
-            Sending request...
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-md mx-auto select-none">
+      <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-cyan-500/20 shadow-2xl shadow-cyan-500/10">
+        {/* Image Section */}
+        <div className="relative h-[500px] overflow-hidden bg-gradient-to-b from-gray-800 to-gray-900">
+          <img
+            src={imageError ? `https://ui-avatars.com/api/?name=${firstName}+${lastName}&size=400&background=0891b2&color=fff&bold=true` : photoUrl}
+            alt={`${firstName} ${lastName}`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              setImageError(true);
+              e.target.src = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&size=400&background=0891b2&color=fff&bold=true`;
+            }}
+          />
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <h2 className="text-3xl font-bold text-white mb-1">
+              {firstName} {lastName}
+            </h2>
+            {age && gender && (
+              <div className="flex items-center space-x-2 text-cyan-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="text-sm font-medium">{age} • {gender}</span>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Content Section */}
+        <div className="p-6 space-y-4">
+          <div>
+            <div className="flex items-center space-x-2 mb-2">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-white">About</h3>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              {about || "No description available"}
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center space-x-2 mb-3">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-white">Skills</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-medium">
+                React
+              </span>
+              <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-full text-xs font-medium">
+                Node.js
+              </span>
+              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-medium">
+                JavaScript
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

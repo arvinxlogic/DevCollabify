@@ -1,10 +1,11 @@
+// src/components/Premium.jsx
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useEffect, useState } from "react";
 
 const Premium = () => {
   const [isUserPremium, setIsUserPremium] = useState(false);
-  
+
   useEffect(() => {
     verifyPremiumUser();
   }, []);
@@ -14,7 +15,6 @@ const Premium = () => {
       const res = await axios.get(BASE_URL + "/premium/verify", {
         withCredentials: true,
       });
-
       if (res.data.isPremium) {
         setIsUserPremium(true);
       }
@@ -27,9 +27,7 @@ const Premium = () => {
     try {
       const order = await axios.post(
         BASE_URL + "/payment/create",
-        {
-          membershipType: type,
-        },
+        { membershipType: type },
         { withCredentials: true }
       );
 
@@ -48,169 +46,229 @@ const Premium = () => {
           contact: "9999999999",
         },
         theme: {
-          color: "#F37254",
+          color: "#06b6d4",
         },
-        handler: verifyPremiumUser,
+        handler: async function (response) {
+          try {
+            const paymentVerification = await axios.post(
+              BASE_URL + "/payment/verify",
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              },
+              { withCredentials: true }
+            );
+            if (paymentVerification.data.success) {
+              alert("Payment Successful! You are now a premium member.");
+              setIsUserPremium(true);
+            }
+          } catch (error) {
+            console.error("Payment verification failed:", error);
+          }
+        },
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
-      console.error("Error creating payment:", error);
-      alert("Failed to initiate payment. Please try again.");
+      console.error("Error creating order:", error);
     }
   };
 
   if (isUserPremium) {
     return (
-      <div className="min-h-screen bg-black text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-green-900 border-2 border-green-500 rounded-lg p-8">
-            <h1 className="text-4xl font-bold text-green-300 mb-4">🎉 Premium Member</h1>
-            <p className="text-xl text-green-200">
-              You're already a premium user! Enjoy all the exclusive features.
-            </p>
-            <div className="mt-6">
-              <span className="bg-green-600 text-white px-6 py-2 rounded-full text-lg font-semibold">
-                ✓ Active Premium Account
-              </span>
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center px-4">
+        <div className="text-center max-w-2xl">
+          <div className="mb-8 relative">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-40 h-40 bg-yellow-500/20 rounded-full blur-3xl animate-pulse"></div>
+            </div>
+            <div className="relative text-9xl mb-4">⭐</div>
+          </div>
+
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent mb-4">
+            Premium Member
+          </h1>
+          <p className="text-gray-400 text-xl mb-8">
+            You're already enjoying all premium features!
+          </p>
+
+          {/* Premium Features */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-xl border border-yellow-500/20 p-6">
+              <div className="text-4xl mb-3">🚀</div>
+              <h3 className="text-white font-semibold mb-2">Unlimited Swipes</h3>
+              <p className="text-gray-400 text-sm">Connect with unlimited developers</p>
+            </div>
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-xl border border-yellow-500/20 p-6">
+              <div className="text-4xl mb-3">💬</div>
+              <h3 className="text-white font-semibold mb-2">Priority Chat</h3>
+              <p className="text-gray-400 text-sm">Get noticed faster</p>
+            </div>
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-xl border border-yellow-500/20 p-6">
+              <div className="text-4xl mb-3">🎯</div>
+              <h3 className="text-white font-semibold mb-2">Advanced Filters</h3>
+              <p className="text-gray-400 text-sm">Find your perfect match</p>
+            </div>
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-xl border border-yellow-500/20 p-6">
+              <div className="text-4xl mb-3">👑</div>
+              <h3 className="text-white font-semibold mb-2">Premium Badge</h3>
+              <p className="text-gray-400 text-sm">Stand out from the crowd</p>
             </div>
           </div>
+
+          <a
+            href="/"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/50"
+          >
+            Back to Feed
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">Upgrade to Premium</h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Unlock premium features and expand your professional network with our subscription plans
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-12 px-4">
+      {/* Header */}
+      <div className="max-w-6xl mx-auto text-center mb-12">
+        <div className="inline-block mb-4">
+          <span className="px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-full text-sm font-semibold">
+            ⭐ PREMIUM MEMBERSHIP
+          </span>
         </div>
+        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent mb-4">
+          Unlock Premium Features
+        </h1>
+        <p className="text-gray-400 text-xl max-w-2xl mx-auto">
+          Get unlimited access and connect with developers faster
+        </p>
+      </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
-          {/* Silver Plan */}
-          <div className="bg-gray-900 rounded-lg border-2 border-blue-500 p-8 text-center relative">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                POPULAR
+      {/* Pricing Cards */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* 6 Month Plan */}
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-cyan-500/20 p-8 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300">
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold text-white mb-2">6 Month Plan</h3>
+            <div className="flex items-baseline space-x-2">
+              <span className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                ₹699
               </span>
-            </div>
-            <h3 className="text-3xl font-bold text-blue-400 mb-6">Silver Membership</h3>
-            <div className="mb-6">
-              <span className="text-4xl font-bold text-white">₹349</span>
-              <span className="text-gray-400">/3 months</span>
-            </div>
-            <ul className="text-gray-300 space-y-3 mb-8 text-left">
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                Chat with other developers
-              </li>
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                100 connection requests per day
-              </li>
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                Verified blue tick badge
-              </li>
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                Priority profile visibility
-              </li>
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                3 months access
-              </li>
-              <li className="flex items-center">
-                <span className="text-blue-400 mr-2">✓</span>
-                Email support
-              </li>
-            </ul>
-            <button 
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105"
-              onClick={() => handleBuyClick('silver')}
-            >
-              Buy Silver Membership
-            </button>
-            <p className="text-gray-400 text-sm mt-3">≈ ₹116 per month</p>
-          </div>
-
-          {/* Gold Plan */}
-          <div className="bg-gray-900 rounded-lg border-2 border-yellow-500 p-8 text-center relative">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-yellow-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                BEST VALUE
-              </span>
-            </div>
-            <h3 className="text-3xl font-bold text-yellow-400 mb-6">Gold Membership</h3>
-            <div className="mb-6">
-              <span className="text-4xl font-bold text-white">₹599</span>
               <span className="text-gray-400">/6 months</span>
             </div>
-            <ul className="text-gray-300 space-y-3 mb-8 text-left">
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                Chat with other developers
-              </li>
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                Unlimited connection requests per day
-              </li>
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                Premium verification badge
-              </li>
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                Featured profile placement
-              </li>
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                6 months access
-              </li>
-              <li className="flex items-center">
-                <span className="text-yellow-400 mr-2">✓</span>
-                Priority customer support
-              </li>
-            </ul>
-            <button 
-              className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105"
-              onClick={() => handleBuyClick('gold')}
-            >
-              Buy Gold Membership
-            </button>
-            <p className="text-gray-400 text-sm mt-3">≈ ₹100 per month</p>
+            <p className="text-cyan-400 text-sm mt-2">≈ ₹116 per month</p>
           </div>
+
+          <ul className="space-y-4 mb-8">
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Unlimited swipes & connections</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Priority messaging</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Advanced search filters</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Premium badge on profile</span>
+            </li>
+          </ul>
+
+          <button
+            onClick={() => handleBuyClick("6-month")}
+            className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/50"
+          >
+            Get 6 Months
+          </button>
         </div>
 
-        {/* NO REFUNDS POLICY */}
-        <div className="bg-gray-900 border-2 border-red-300 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-red-300 mb-3 text-center flex items-center justify-center">
-            <span className="mr-3">⚠️</span>
-            No Refunds Policy
-          </h2>
-          <div className="text-center">
-            <p className="text-red-200 font-semibold mb-2">
-              All payments are final and non-refundable
-            </p>
-            <p className="text-red-100 text-sm">
-              Please choose your plan carefully before making the payment.
-            </p>
+        {/* 12 Month Plan - Popular */}
+        <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl border-2 border-yellow-500/50 p-8 shadow-2xl shadow-yellow-500/20 hover:shadow-yellow-500/30 transition-all duration-300">
+          {/* Popular Badge */}
+          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+            <span className="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold rounded-full text-sm shadow-lg">
+              MOST POPULAR
+            </span>
           </div>
-        </div>
 
-        {/* Security Notice */}
-        <div className="text-center">
-          <div className="bg-gray-800 border border-gray-600 rounded-lg p-4 inline-block">
-            <p className="text-gray-300 text-sm flex items-center">
-              <span className="mr-2">🔒</span>
-              Secure payments powered by Razorpay
-            </p>
+          <div className="mb-6 mt-4">
+            <h3 className="text-2xl font-bold text-white mb-2">12 Month Plan</h3>
+            <div className="flex items-baseline space-x-2">
+              <span className="text-5xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                ₹1199
+              </span>
+              <span className="text-gray-400">/year</span>
+            </div>
+            <p className="text-yellow-400 text-sm mt-2">≈ ₹100 per month • Save 14%</p>
+          </div>
+
+          <ul className="space-y-4 mb-8">
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Everything in 6-month plan</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Best value for money</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Early access to new features</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <svg className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-gray-300">Priority customer support</span>
+            </li>
+          </ul>
+
+          <button
+            onClick={() => handleBuyClick("12-month")}
+            className="w-full py-4 bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-bold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg shadow-yellow-500/50"
+          >
+            Get 12 Months - Best Deal
+          </button>
+        </div>
+      </div>
+
+      {/* Trust Indicators */}
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-cyan-500/20 p-8">
+          <h3 className="text-xl font-bold text-white mb-6">Trusted by Developers Worldwide</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <p className="text-3xl font-bold text-cyan-400 mb-2">10K+</p>
+              <p className="text-gray-400 text-sm">Premium Members</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-cyan-400 mb-2">50K+</p>
+              <p className="text-gray-400 text-sm">Connections Made</p>
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-cyan-400 mb-2">4.8★</p>
+              <p className="text-gray-400 text-sm">User Rating</p>
+            </div>
           </div>
         </div>
       </div>

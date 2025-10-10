@@ -1,3 +1,4 @@
+// src/components/NavBar.jsx
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -30,149 +31,201 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="bg-gray-900/95 backdrop-blur-md border-b border-gray-700/50 shadow-xl sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-lg border-b border-cyan-500/20 shadow-lg shadow-cyan-500/5">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link 
-            to="/" 
-            className="flex items-center space-x-2 text-xl font-bold text-white hover:text-blue-400 transition-all duration-300"
-          >
-            <span className="text-2xl">👨🏻‍💻</span>
-            <span>DevConnect</span>
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <span className="text-3xl transform group-hover:rotate-12 transition-transform duration-300">
+              👨🏻‍💻
+            </span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+              DevConnect
+            </span>
           </Link>
 
           {user && (
             <>
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-6">
-                <div className="text-gray-300 text-sm">
-                  Hey, <span className="text-blue-400 font-medium">{user.firstName}!</span>
-                </div>
+              <div className="hidden md:flex items-center space-x-1">
+                <Link
+                  to="/"
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                >
+                  Feed
+                </Link>
+                <Link
+                  to="/connections"
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                >
+                  Connections
+                </Link>
+                <Link
+                  to="/requests"
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                >
+                  Requests
+                </Link>
+                <Link
+                  to="/premium"
+                  className="px-4 py-2 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-lg transition-all duration-200 flex items-center space-x-1"
+                >
+                  <span>Premium</span>
+                  <span className="text-lg">⭐</span>
+                </Link>
+              </div>
+
+              {/* User Section */}
+              <div className="hidden md:flex items-center space-x-4">
+                <span className="text-sm text-gray-400">
+                  Hey, <span className="text-cyan-400 font-semibold">{user.firstName}</span>!
+                </span>
                 
-                <div className="flex items-center space-x-1">
-                  <Link 
-                    to="/profile" 
-                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
+                {/* User Menu */}
+                <div className="flex items-center space-x-3">
+                  <Link
+                    to="/profile"
+                    className="relative group"
                   >
-                    Profile
-                  </Link>
-                  <Link 
-                    to="/connections" 
-                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
-                  >
-                    Connections
-                  </Link>
-                  <Link 
-                    to="/requests" 
-                    className="px-3 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200"
-                  >
-                    Requests
-                  </Link>
-                  <Link 
-                    to="/premium" 
-                    className="px-3 py-2 rounded-lg text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 transition-all duration-200 font-medium"
-                  >
-                    Premium ⭐
-                  </Link>
-                </div>
-                
-                {/* User Section */}
-                <div className="flex items-center space-x-3 pl-3 border-l border-gray-700">
-                  <div className="relative">
-                    <img 
-                      alt="user photo" 
-                      src={user.photoUrl} 
-                      className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-600 hover:ring-blue-500 transition-all duration-200"
+                    <img
+                      src={user.photoUrl}
+                      alt={user.firstName}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-cyan-500/30 group-hover:border-cyan-500 transition-all duration-300 ring-2 ring-transparent group-hover:ring-cyan-500/20 ring-offset-2 ring-offset-black"
                       onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/36/6b7280/ffffff?text=' + user.firstName[0];
+                        e.target.src = "https://via.placeholder.com/150?text=" + user.firstName?.charAt(0);
                       }}
                     />
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
-                  </div>
-                  
-                  <button 
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black"></span>
+                  </Link>
+
+                  <button
                     onClick={handleLogout}
-                    className="px-3 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all duration-200 text-sm font-medium"
+                    className="px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg shadow-red-500/20"
                   >
                     Logout
                   </button>
                 </div>
               </div>
 
-              {/* Mobile hamburger button */}
-              <div className="md:hidden flex items-center space-x-3">
-                <div className="relative">
-                  <img 
-                    alt="user photo" 
-                    src={user.photoUrl} 
-                    className="w-8 h-8 rounded-full object-cover ring-2 ring-gray-600"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/32/6b7280/ffffff?text=' + user.firstName[0];
-                    }}
-                  />
-                </div>
-                <button
-                  onClick={toggleMenu}
-                  className="p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none transition-all duration-200"
+              {/* Mobile Menu Button */}
+              <button
+                onClick={toggleMenu}
+                className="md:hidden p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    {isMenuOpen ? (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    ) : (
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    )}
-                  </svg>
-                </button>
-              </div>
+                  {isMenuOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
             </>
           )}
-        </div>
-      </div>
 
-      {/* Mobile Navigation Menu */}
-      {user && isMenuOpen && (
-        <div className="md:hidden bg-gray-900/98 backdrop-blur-sm border-t border-gray-700/50">
-          <div className="px-4 pt-2 pb-4 space-y-1">
-            <div className="px-3 py-3 text-gray-300 border-b border-gray-700/50 mb-3">
-              <span className="text-sm">Welcome back,</span>
-              <div className="text-blue-400 font-medium">{user.firstName}!</div>
-            </div>
-            
-            {[
-              { to: "/profile", label: "Profile" },
-              { to: "/connections", label: "Connections" },
-              { to: "/requests", label: "Requests" },
-              { to: "/premium", label: "Premium ⭐", special: true }
-            ].map(({ to, label, special }) => (
-              <Link 
-                key={to}
-                to={to} 
-                className={`block px-3 py-3 rounded-lg transition-all duration-200 ${
-                  special 
-                    ? "text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10 font-medium" 
-                    : "text-gray-300 hover:text-white hover:bg-gray-800"
-                }`}
-                onClick={closeMenu}
+          {/* Login/Signup for non-logged users */}
+          {!user && (
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/login"
+                className="px-6 py-2 text-white hover:text-cyan-400 transition-colors duration-200"
               >
-                {label}
+                Login
               </Link>
-            ))}
-            
-            <div className="pt-3 border-t border-gray-700/50">
-              <button 
+              <Link
+                to="/login"
+                className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/30"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Menu */}
+        {user && isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-gray-800 animate-slideDown">
+            <div className="flex flex-col space-y-2">
+              {/* User Info */}
+              <div className="flex items-center space-x-3 px-4 py-3 bg-gray-900/50 rounded-lg mb-2">
+                <img
+                  src={user.photoUrl}
+                  alt={user.firstName}
+                  className="w-12 h-12 rounded-full object-cover border-2 border-cyan-500/30"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/150?text=" + user.firstName?.charAt(0);
+                  }}
+                />
+                <div>
+                  <p className="text-white font-semibold">{user.firstName} {user.lastName}</p>
+                  <p className="text-xs text-gray-400">{user.emailId}</p>
+                </div>
+              </div>
+
+              <Link
+                to="/profile"
+                onClick={closeMenu}
+                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+              >
+                Profile
+              </Link>
+              <Link
+                to="/"
+                onClick={closeMenu}
+                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+              >
+                Feed
+              </Link>
+              <Link
+                to="/connections"
+                onClick={closeMenu}
+                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+              >
+                Connections
+              </Link>
+              <Link
+                to="/requests"
+                onClick={closeMenu}
+                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+              >
+                Requests
+              </Link>
+              <Link
+                to="/premium"
+                onClick={closeMenu}
+                className="px-4 py-3 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-lg transition-all duration-200 flex items-center space-x-2"
+              >
+                <span>Premium</span>
+                <span className="text-lg">⭐</span>
+              </Link>
+              <button
                 onClick={() => {
-                  handleLogout();
                   closeMenu();
+                  handleLogout();
                 }}
-                className="w-full text-left px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all duration-200"
+                className="mx-4 mt-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-medium transition-all duration-200"
               >
                 Logout
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
 };

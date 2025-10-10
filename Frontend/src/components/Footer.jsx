@@ -4,90 +4,141 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 border-t border-gray-800 text-white py-10 mt-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-gradient-to-b from-black to-gray-900 text-white border-t border-cyan-500/20">
+      {/* Main Footer Content */}
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
-          {/* Company Info */}
-          <div className="col-span-1 lg:col-span-1">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-              👨🏻‍💻 DevConnect
-            </h3>
-            <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-              Professional networking platform for developers worldwide. 
-              Connect, collaborate, and grow your tech career.
+          {/* Brand Section */}
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-4xl">👨🏻‍💻</span>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                DevConnect
+              </h2>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Connect with talented developers worldwide. Build your network, share knowledge, and grow together.
             </p>
-            <div className="space-y-2">
-              <p className="text-gray-400 text-sm flex items-center">
-                📧 <a href="mailto:arvindsinghq05@gmail.com" className="hover:text-blue-400 transition-colors ml-2">
-                  arvindsinghq05@connectdev.online
-                </a>
-              </p>
-              <p className="text-gray-400 text-sm flex items-center">
-                🌐 <a href="https://connectdev.online" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition-colors ml-2">
-                  connectdev.online
-                </a>
-              </p>
+            {/* Social Links */}
+            <div className="flex space-x-4 pt-2">
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                aria-label="Twitter"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                aria-label="GitHub"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                aria-label="LinkedIn"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Company Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Platform</h4>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-400">Company</h3>
             <ul className="space-y-3">
-              <li><Link to="/" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Home</Link></li>
-              <li><Link to="/pricing" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Pricing</Link></li>
-              <li><Link to="/about" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">About Us</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Contact Us</Link></li>
+              <li>
+                <Link
+                  to="/about"
+                  className="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/pricing"
+                  className="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                >
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Legal (MANDATORY for Razorpay) */}
+          {/* Legal Links */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Legal</h4>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-400">Legal</h3>
             <ul className="space-y-3">
-              <li><Link to="/privacy" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Terms & Conditions</Link></li>
+              <li>
+                <Link
+                  to="/privacy"
+                  className="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Support</h4>
-            <ul className="space-y-3">
-              <li><a href="mailto:arvindsinghq05@gmail.com" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Email Support</a></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-blue-400 text-sm transition-colors hover:underline">Help Center</Link></li>
-              <li><span className="text-gray-400 text-sm">Response: 24-48 hours</span></li>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-400">Get in Touch</h3>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start space-x-3">
+                <svg className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span className="text-gray-400">support@devconnect.com</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <svg className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="text-gray-400">New Delhi, India</span>
+              </li>
             </ul>
           </div>
         </div>
+      </div>
 
-        <hr className="border-gray-800 my-8" />
-
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} DevConnect. All rights reserved.
-          </p>
-          <div className="flex flex-wrap justify-center md:justify-end space-x-6">
-            <Link to="/privacy" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Terms</Link>
-            <Link to="/contact" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Contact</Link>
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} DevConnect. All rights reserved.
+            </p>
+            <p className="text-sm text-gray-500">
+              Made with <span className="text-red-500">❤️</span> for Developers
+            </p>
           </div>
-        </div>
-
-        {/* Razorpay Required Info */}
-        <div className="mt-6 pt-4 border-t border-gray-800 text-center">
-          <p className="text-gray-500 text-xs leading-relaxed">
-            Secure payments powered by Razorpay | Business Email:{" "}
-            <a href="mailto:arvindsinghq05@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
-              arvindsinghq05@connectdev.online
-            </a>{" "}
-            | Website:{" "}
-            <a href="https://connectdev.online" target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
-              https://connectdev.online
-            </a>
-          </p>
         </div>
       </div>
     </footer>
