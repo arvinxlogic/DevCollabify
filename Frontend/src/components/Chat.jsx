@@ -13,7 +13,6 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const userId = user?._id;
   const messagesEndRef = useRef(null);
-  const [isTyping, setIsTyping] = useState(false);
   const [targetUser, setTargetUser] = useState(null);
 
   const scrollToBottom = () => {
@@ -40,7 +39,6 @@ const Chat = () => {
         };
       });
       
-      // Get target user info from first message
       if (chatMessages.length > 0) {
         const firstOtherMessage = chatMessages.find(msg => msg.senderId !== userId);
         if (firstOtherMessage) {
@@ -108,23 +106,23 @@ const Chat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col">
       {/* Chat Header */}
-      <div className="bg-gray-900/95 backdrop-blur-lg border-b border-cyan-500/20 sticky top-0 z-10">
+      <div className="bg-slate-800/95 backdrop-blur-lg border-b border-slate-700 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center space-x-4">
             {/* Back Button */}
             <button
               onClick={() => window.history.back()}
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200"
+              className="p-2 hover:bg-slate-700 rounded-lg transition-colors duration-200"
             >
-              <svg className="w-6 h-6 text-gray-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-slate-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
             </button>
 
             {/* User Avatar */}
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
               {targetUser?.firstName?.charAt(0) || "U"}
             </div>
 
@@ -134,14 +132,14 @@ const Chat = () => {
                 {targetUser ? `${targetUser.firstName} ${targetUser.lastName}` : "Loading..."}
               </h2>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-400">Online</span>
+                <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                <span className="text-sm text-slate-400">Online</span>
               </div>
             </div>
 
-            {/* Menu Button */}
-            <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors duration-200">
-              <svg className="w-6 h-6 text-gray-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Menu */}
+            <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors duration-200">
+              <svg className="w-6 h-6 text-slate-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
               </svg>
             </button>
@@ -156,7 +154,7 @@ const Chat = () => {
             <div className="flex flex-col items-center justify-center h-96">
               <div className="text-6xl mb-4">💬</div>
               <h3 className="text-xl font-semibold text-white mb-2">No messages yet</h3>
-              <p className="text-gray-400 text-sm">Send a message to start the conversation</p>
+              <p className="text-slate-400 text-sm">Send a message to start the conversation</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -170,7 +168,7 @@ const Chat = () => {
                     <div className={`flex items-end space-x-2 max-w-md ${isMyMessage ? "flex-row-reverse space-x-reverse" : ""}`}>
                       {/* Avatar */}
                       {!isMyMessage && (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                           {msg.firstName?.charAt(0)}
                         </div>
                       )}
@@ -178,20 +176,20 @@ const Chat = () => {
                       {/* Message Bubble */}
                       <div>
                         {!isMyMessage && (
-                          <p className="text-xs text-gray-500 mb-1 ml-2">
+                          <p className="text-xs text-slate-500 mb-1 ml-2">
                             {msg.firstName} {msg.lastName}
                           </p>
                         )}
                         <div
                           className={`px-4 py-3 rounded-2xl ${
                             isMyMessage
-                              ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-br-sm"
-                              : "bg-gray-800 text-white rounded-bl-sm"
+                              ? "bg-blue-600 text-white rounded-br-sm"
+                              : "bg-slate-700 text-white rounded-bl-sm"
                           }`}
                         >
                           <p className="text-sm leading-relaxed break-words">{msg.text}</p>
                         </div>
-                        <p className={`text-xs text-gray-500 mt-1 ${isMyMessage ? "text-right mr-2" : "ml-2"}`}>
+                        <p className={`text-xs text-slate-500 mt-1 ${isMyMessage ? "text-right mr-2" : "ml-2"}`}>
                           {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
@@ -206,25 +204,25 @@ const Chat = () => {
       </div>
 
       {/* Message Input */}
-      <div className="bg-gray-900/95 backdrop-blur-lg border-t border-cyan-500/20 sticky bottom-0">
+      <div className="bg-slate-800/95 backdrop-blur-lg border-t border-slate-700 sticky bottom-0">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-end space-x-3">
-            {/* Attachment Button */}
-            <button className="p-3 text-gray-400 hover:text-cyan-400 hover:bg-gray-800 rounded-xl transition-all duration-200 mb-1">
+            {/* Attachment */}
+            <button className="p-3 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded-xl transition-all duration-200 mb-1">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
               </svg>
             </button>
 
             {/* Text Input */}
-            <div className="flex-1 bg-gray-800 rounded-2xl border border-gray-700 focus-within:border-cyan-500 transition-colors duration-200">
+            <div className="flex-1 bg-slate-700 rounded-2xl border border-slate-600 focus-within:border-blue-500 transition-colors duration-200">
               <textarea
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type a message..."
                 rows="1"
-                className="w-full px-4 py-3 bg-transparent text-white placeholder-gray-500 focus:outline-none resize-none max-h-32"
+                className="w-full px-4 py-3 bg-transparent text-white placeholder-slate-500 focus:outline-none resize-none max-h-32"
                 style={{ minHeight: "48px" }}
               />
             </div>
@@ -233,7 +231,7 @@ const Chat = () => {
             <button
               onClick={sendMessage}
               disabled={!newMessage.trim()}
-              className="p-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg shadow-cyan-500/30 disabled:shadow-none mb-1"
+              className="p-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg mb-1"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

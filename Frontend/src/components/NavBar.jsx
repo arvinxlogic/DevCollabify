@@ -1,16 +1,35 @@
-// src/components/NavBar.jsx
+// src/components/NavBar.jsx - WITH PREMIUM INDICATOR
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
+
+  // Check Premium Status
+  useEffect(() => {
+    const checkPremium = async () => {
+      try {
+        const res = await axios.get(BASE_URL + "/premium/verify", {
+          withCredentials: true,
+        });
+        setIsPremium(res.data.isPremium);
+      } catch (err) {
+        setIsPremium(false);
+      }
+    };
+    
+    if (user) {
+      checkPremium();
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -31,15 +50,15 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-black/95 backdrop-blur-lg border-b border-cyan-500/20 shadow-lg shadow-cyan-500/5">
+    <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-lg border-b border-slate-700 shadow-lg">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
-          {/* Logo Section */}
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <span className="text-3xl transform group-hover:rotate-12 transition-transform duration-300">
               👨🏻‍💻
             </span>
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent animate-gradient">
+            <span className="text-2xl font-bold text-slate-200">
               DevConnect
             </span>
           </Link>
@@ -50,25 +69,25 @@ const NavBar = () => {
               <div className="hidden md:flex items-center space-x-1">
                 <Link
                   to="/"
-                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                  className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200"
                 >
                   Feed
                 </Link>
                 <Link
                   to="/connections"
-                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                  className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200"
                 >
                   Connections
                 </Link>
                 <Link
                   to="/requests"
-                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
+                  className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200"
                 >
                   Requests
                 </Link>
                 <Link
                   to="/premium"
-                  className="px-4 py-2 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-lg transition-all duration-200 flex items-center space-x-1"
+                  className="px-4 py-2 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg transition-all duration-200 flex items-center space-x-1"
                 >
                   <span>Premium</span>
                   <span className="text-lg">⭐</span>
@@ -77,30 +96,34 @@ const NavBar = () => {
 
               {/* User Section */}
               <div className="hidden md:flex items-center space-x-4">
-                <span className="text-sm text-gray-400">
-                  Hey, <span className="text-cyan-400 font-semibold">{user.firstName}</span>!
+                {/* Premium Badge */}
+                {isPremium && (
+                  <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center space-x-1">
+                    <span className="text-lg">⭐</span>
+                    <span className="text-amber-400 text-xs font-semibold">PREMIUM</span>
+                  </div>
+                )}
+                
+                <span className="text-sm text-slate-400">
+                  Hey, <span className="text-blue-400 font-semibold">{user.firstName}</span>!
                 </span>
                 
-                {/* User Menu */}
                 <div className="flex items-center space-x-3">
-                  <Link
-                    to="/profile"
-                    className="relative group"
-                  >
+                  <Link to="/profile" className="relative group">
                     <img
                       src={user.photoUrl}
                       alt={user.firstName}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-cyan-500/30 group-hover:border-cyan-500 transition-all duration-300 ring-2 ring-transparent group-hover:ring-cyan-500/20 ring-offset-2 ring-offset-black"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-blue-500/30 group-hover:border-blue-500 transition-all duration-300"
                       onError={(e) => {
                         e.target.src = "https://via.placeholder.com/150?text=" + user.firstName?.charAt(0);
                       }}
                     />
-                    <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black"></span>
+                    <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-teal-500 rounded-full border-2 border-slate-900"></span>
                   </Link>
 
                   <button
                     onClick={handleLogout}
-                    className="px-5 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg shadow-red-500/20"
+                    className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105"
                   >
                     Logout
                   </button>
@@ -110,47 +133,25 @@ const NavBar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="md:hidden p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                className="md:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors duration-200"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {isMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   )}
                 </svg>
               </button>
             </>
           )}
 
-          {/* Login/Signup for non-logged users */}
           {!user && (
             <div className="flex items-center space-x-4">
-              <Link
-                to="/login"
-                className="px-6 py-2 text-white hover:text-cyan-400 transition-colors duration-200"
-              >
+              <Link to="/login" className="px-6 py-2 text-white hover:text-blue-400 transition-colors duration-200">
                 Login
               </Link>
-              <Link
-                to="/login"
-                className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/30"
-              >
+              <Link to="/login" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
                 Sign Up
               </Link>
             </div>
@@ -159,67 +160,46 @@ const NavBar = () => {
 
         {/* Mobile Menu */}
         {user && isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-800 animate-slideDown">
+          <div className="md:hidden py-4 border-t border-slate-800 animate-slideDown">
             <div className="flex flex-col space-y-2">
-              {/* User Info */}
-              <div className="flex items-center space-x-3 px-4 py-3 bg-gray-900/50 rounded-lg mb-2">
+              <div className="flex items-center space-x-3 px-4 py-3 bg-slate-800/50 rounded-lg mb-2">
                 <img
                   src={user.photoUrl}
                   alt={user.firstName}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-cyan-500/30"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-500/30"
                   onError={(e) => {
                     e.target.src = "https://via.placeholder.com/150?text=" + user.firstName?.charAt(0);
                   }}
                 />
-                <div>
-                  <p className="text-white font-semibold">{user.firstName} {user.lastName}</p>
-                  <p className="text-xs text-gray-400">{user.emailId}</p>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2">
+                    <p className="text-white font-semibold">{user.firstName} {user.lastName}</p>
+                    {isPremium && <span className="text-lg">⭐</span>}
+                  </div>
+                  <p className="text-xs text-slate-400">{user.emailId}</p>
+                  {isPremium && (
+                    <span className="text-xs text-amber-400 font-semibold">Premium Member</span>
+                  )}
                 </div>
               </div>
 
-              <Link
-                to="/profile"
-                onClick={closeMenu}
-                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
-              >
+              <Link to="/profile" onClick={closeMenu} className="px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200">
                 Profile
               </Link>
-              <Link
-                to="/"
-                onClick={closeMenu}
-                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
-              >
+              <Link to="/" onClick={closeMenu} className="px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200">
                 Feed
               </Link>
-              <Link
-                to="/connections"
-                onClick={closeMenu}
-                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
-              >
+              <Link to="/connections" onClick={closeMenu} className="px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200">
                 Connections
               </Link>
-              <Link
-                to="/requests"
-                onClick={closeMenu}
-                className="px-4 py-3 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-lg transition-all duration-200"
-              >
+              <Link to="/requests" onClick={closeMenu} className="px-4 py-3 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200">
                 Requests
               </Link>
-              <Link
-                to="/premium"
-                onClick={closeMenu}
-                className="px-4 py-3 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 rounded-lg transition-all duration-200 flex items-center space-x-2"
-              >
+              <Link to="/premium" onClick={closeMenu} className="px-4 py-3 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 rounded-lg transition-all duration-200 flex items-center space-x-2">
                 <span>Premium</span>
                 <span className="text-lg">⭐</span>
               </Link>
-              <button
-                onClick={() => {
-                  closeMenu();
-                  handleLogout();
-                }}
-                className="mx-4 mt-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg font-medium transition-all duration-200"
-              >
+              <button onClick={() => { closeMenu(); handleLogout(); }} className="mx-4 mt-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-all duration-200">
                 Logout
               </button>
             </div>

@@ -39,11 +39,11 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-8 px-4">
       {/* Success Toast */}
       {showToast && (
         <div className="fixed top-20 right-4 z-50 animate-slideDown">
-          <div className="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3">
+          <div className="bg-teal-600 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -55,18 +55,18 @@ const EditProfile = ({ user }) => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-slate-200 mb-2">
             Edit Profile
           </h1>
-          <p className="text-gray-400">Update your information and see how it looks</p>
+          <p className="text-slate-400">Update your information and see how it looks</p>
         </div>
 
         {/* Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Side - Form */}
-          <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-cyan-500/20 p-8 shadow-2xl">
+          {/* Left - Form */}
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-slate-700 p-8 shadow-2xl">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center space-x-2">
-              <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
               <span>Personal Information</span>
@@ -83,29 +83,25 @@ const EditProfile = ({ user }) => {
             )}
 
             <div className="space-y-5">
-              {/* First Name & Last Name */}
+              {/* Names */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    First Name
-                  </label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">First Name</label>
                   <input
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                     placeholder="John"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Last Name
-                  </label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Last Name</label>
                   <input
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                     placeholder="Doe"
                   />
                 </div>
@@ -113,14 +109,12 @@ const EditProfile = ({ user }) => {
 
               {/* Photo URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Photo URL
-                </label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Photo URL</label>
                 <input
                   type="text"
                   value={photoUrl}
                   onChange={(e) => setPhotoUrl(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                   placeholder="https://example.com/photo.jpg"
                 />
               </div>
@@ -128,25 +122,21 @@ const EditProfile = ({ user }) => {
               {/* Age & Gender */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Age
-                  </label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Age</label>
                   <input
                     type="number"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                     placeholder="25"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Gender
-                  </label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Gender</label>
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
                   >
                     <option value="">Select</option>
                     <option value="Male">Male</option>
@@ -158,26 +148,22 @@ const EditProfile = ({ user }) => {
 
               {/* About */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  About
-                </label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">About</label>
                 <textarea
                   value={about}
                   onChange={(e) => setAbout(e.target.value)}
                   rows="4"
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200 resize-none"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 resize-none"
                   placeholder="Tell us about yourself..."
                 />
-                <p className="mt-2 text-sm text-gray-500">
-                  {about.length}/500 characters
-                </p>
+                <p className="mt-2 text-sm text-slate-500">{about.length}/500 characters</p>
               </div>
 
               {/* Save Button */}
               <button
                 onClick={saveProfile}
                 disabled={isLoading}
-                className="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
               >
                 {isLoading ? (
                   <>
@@ -199,11 +185,11 @@ const EditProfile = ({ user }) => {
             </div>
           </div>
 
-          {/* Right Side - Preview */}
+          {/* Right - Preview */}
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-cyan-500/20 p-8 shadow-2xl">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-slate-700 p-8 shadow-2xl">
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center space-x-2">
-                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -212,21 +198,13 @@ const EditProfile = ({ user }) => {
 
               <div className="transform scale-90 origin-top">
                 <UserCard
-                  user={{
-                    _id: user._id,
-                    firstName,
-                    lastName,
-                    photoUrl,
-                    age,
-                    gender,
-                    about,
-                  }}
+                  user={{ _id: user._id, firstName, lastName, photoUrl, age, gender, about }}
                   isPreview={true}
                 />
               </div>
 
-              <div className="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                <p className="text-sm text-cyan-400 flex items-start space-x-2">
+              <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <p className="text-sm text-blue-400 flex items-start space-x-2">
                   <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>

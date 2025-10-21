@@ -44,28 +44,27 @@ const Requests = () => {
 
   if (!requests) return null;
 
-  // Empty State
   if (requests.length === 0)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="mb-8 relative">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl animate-pulse"></div>
+              <div className="w-32 h-32 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
             </div>
             <div className="relative text-8xl mb-4 animate-bounce">📬</div>
           </div>
 
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
+          <h2 className="text-3xl font-bold text-slate-200 mb-4">
             No Pending Requests
           </h2>
-          <p className="text-gray-400 text-lg leading-relaxed mb-8">
+          <p className="text-slate-400 text-lg leading-relaxed mb-8">
             You don't have any connection requests at the moment. Keep discovering new developers!
           </p>
 
           <a
             href="/"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/50"
+            className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
           >
             Discover Developers
           </a>
@@ -74,15 +73,15 @@ const Requests = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-8 px-4">
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
         <div className="text-center md:text-left">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-slate-200 mb-2">
             Connection Requests
           </h1>
-          <p className="text-gray-400">
-            You have <span className="text-cyan-400 font-semibold">{requests.length}</span> pending request{requests.length !== 1 ? 's' : ''}
+          <p className="text-slate-400">
+            You have <span className="text-blue-400 font-semibold">{requests.length}</span> pending request{requests.length !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
@@ -92,7 +91,7 @@ const Requests = () => {
         {requests.map((request) => (
           <div
             key={request._id}
-            className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-cyan-500/20 shadow-xl hover:shadow-cyan-500/20 transition-all duration-300"
+            className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-slate-700 shadow-xl hover:shadow-blue-500/10 transition-all duration-300"
           >
             <div className="p-6">
               <div className="flex flex-col md:flex-row gap-6">
@@ -102,16 +101,15 @@ const Requests = () => {
                     <img
                       src={
                         request.fromUserId?.photoUrl ||
-                        `https://ui-avatars.com/api/?name=${request.fromUserId?.firstName}+${request.fromUserId?.lastName}&size=200&background=0891b2&color=fff&bold=true`
+                        `https://ui-avatars.com/api/?name=${request.fromUserId?.firstName}+${request.fromUserId?.lastName}&size=200&background=334155&color=fff&bold=true`
                       }
                       alt={`${request.fromUserId?.firstName} ${request.fromUserId?.lastName}`}
-                      className="w-24 h-24 md:w-32 md:h-32 rounded-xl object-cover border-2 border-cyan-500/30"
+                      className="w-24 h-24 md:w-32 md:h-32 rounded-xl object-cover border-2 border-blue-500/30"
                       onError={(e) => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${request.fromUserId?.firstName}+${request.fromUserId?.lastName}&size=200&background=0891b2&color=fff&bold=true`;
+                        e.target.src = `https://ui-avatars.com/api/?name=${request.fromUserId?.firstName}+${request.fromUserId?.lastName}&size=200&background=334155&color=fff&bold=true`;
                       }}
                     />
-                    {/* Online Badge */}
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-black"></div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-teal-500 rounded-full border-4 border-slate-900"></div>
                   </div>
                 </div>
 
@@ -123,7 +121,7 @@ const Requests = () => {
                     </h3>
                     
                     {request.fromUserId?.age && request.fromUserId?.gender && (
-                      <div className="flex items-center space-x-2 text-gray-400 mb-3">
+                      <div className="flex items-center space-x-2 text-slate-400 mb-3">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -134,31 +132,31 @@ const Requests = () => {
                     )}
 
                     {request.fromUserId?.about && (
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-slate-400 text-sm leading-relaxed">
                         {request.fromUserId.about}
                       </p>
                     )}
                   </div>
 
-                  {/* Skills Tags */}
+                  {/* Skills */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-medium">
+                    <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-full text-xs font-medium">
                       React
                     </span>
-                    <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-full text-xs font-medium">
+                    <span className="px-3 py-1 bg-teal-500/10 border border-teal-500/30 text-teal-400 rounded-full text-xs font-medium">
                       Node.js
                     </span>
-                    <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full text-xs font-medium">
+                    <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-full text-xs font-medium">
                       JavaScript
                     </span>
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() => reviewRequest("rejected", request._id)}
                       disabled={processingId === request._id}
-                      className="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-red-500/50 text-gray-300 hover:text-red-400 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                      className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 hover:text-red-400 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                     >
                       {processingId === request._id ? (
                         <>
@@ -181,7 +179,7 @@ const Requests = () => {
                     <button
                       onClick={() => reviewRequest("accepted", request._id)}
                       disabled={processingId === request._id}
-                      className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
+                      className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
                     >
                       {processingId === request._id ? (
                         <>
